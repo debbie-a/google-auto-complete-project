@@ -87,7 +87,7 @@ def run():
                     print(f'{i}. {res}')
 
                 # let user continue his search
-                string_to_complete += read_input_from_user(f'\033[31m\x1B[3m{string_to_complete}\033[0m')
+                string_to_complete += read_input_from_user(f'\033[32m\x1B[3m{string_to_complete}\033[0m')
 
             else:
                 break
