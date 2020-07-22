@@ -1,23 +1,13 @@
 import os
 from collections import defaultdict
+import re
 from auto_complete_data import AutoCompleteData
 
 
-def score(word, sentence):
-    return len(word) * 2
-
-
 def clean_string(string_):
-    return ''.join(letter for letter in string_ if letter.isalnum()).lower()
-
-
-def get_key(sentence):
-    for word in words:
-        word_ = clean_string(word)
-        if word_ != '':
-            return word_
-
-    return None
+    pattern = re.compile('[^A-Za-z0-9 -]')
+    string_ = pattern.sub('', string_)
+    return " ".join(string_.split()).lower()
 
 
 def remove_lowest_score(list_):
@@ -27,7 +17,7 @@ def remove_lowest_score(list_):
 
 
 def get_files():
-    path = 'technology_texts\collection'
+    path = f'{AutoCompleteData.root}collection'
     file_list = []
     for root, dirs, files in os.walk(path):
         for file in files:
@@ -48,18 +38,18 @@ def init_data_collection(data_collection):
     files = get_files()
 
     for file in files:
-        source = file
+        source = file[file.index("\\") + 1: file.index(".")]
         data = read_data_from_file(file)
 
         for i, sentence in enumerate(data, 1):
             sentence_ = clean_string(sentence[::])
 
             for key in [sentence_[i: j] for i in range(len(sentence_)) for j in range(i + 1, len(sentence_) + 1)]:
-                if key is not None:
-                    data_collection[key] += [AutoCompleteData(sentence, source, i, score(key, sentence))]
-                    data_collection[key] = list(dict.fromkeys(data_collection[key]))
-                    if len(data_collection[key]) > 5:
-                        remove_lowest_score(data_collection[key])
+                data_collection[key] += [AutoCompleteData(sentence, source, i, AutoCompleteData.get_score(key, sentence))]
+                data_collection[key] = list(dict.fromkeys(data_collection[key]))
+
+                if len(data_collection[key]) > 5:
+                    remove_lowest_score(data_collection[key])
 
 
 def get_best_k_completions(prefix, data_collection):
@@ -87,7 +77,7 @@ def run():
                     print(f'{i}. {res}')
 
                 # let user continue his search
-                string_to_complete += read_input_from_user(f'\033[32m\x1B[3m{string_to_complete}\033[0m')
+                string_to_complete += read_input_from_user(f"\u001b[38;5;28m\x1B[3m{string_to_complete}\033[0m")
 
             else:
                 break
