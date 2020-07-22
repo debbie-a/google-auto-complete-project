@@ -1,4 +1,3 @@
-import linecache
 import os
 from collections import defaultdict
 import re
@@ -32,7 +31,7 @@ def load_data_from_files(list_, file_dict, prefix):
     # load autocomplete objects into dict from file data
     data = {}
     for pair in list_:
-        sentence = linecache.getline(file_dict[pair[0]], pair[1])[:-1]
+        sentence = read_data_from_file(file_dict[pair[0]])[pair[1] - 1]
         data['*'.join(map(str, pair))] = AutoCompleteData(sentence, file_dict[pair[0]][:file_dict[pair[0]].index(".")],
                                                           pair[1], AutoCompleteData.get_score(prefix, sentence))
     return data

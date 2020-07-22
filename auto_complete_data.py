@@ -1,7 +1,7 @@
 
 
 class AutoCompleteData:
-    root = "technology_texts\\"
+    root = "try\\"
 
     def __init__(self, sentence, source, offset, score_):
         self.completed_sentence = sentence
