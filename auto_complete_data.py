@@ -1,7 +1,7 @@
 
 
 class AutoCompleteData:
-    root = "file\\"
+    root = "technology_texts\\"
 
     def __init__(self, sentence, source, offset, score_):
         self.completed_sentence = sentence
@@ -16,9 +16,8 @@ class AutoCompleteData:
         self.score -= points_to_decrement
 
     @staticmethod
-    def get_score(word):
+    def get_score(word, sentence):
         return len(word) * 2
-
 
 
 
