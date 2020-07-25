@@ -88,7 +88,6 @@ def init_data_collection(data_collection, file_dict):
     # for each file read data
     for key_, file in file_dict.items():
         file_id = key_
-        print(file)
         f = open(file, "r", encoding="utf8")
         file_line = 0
         while not is_eof(f):
@@ -107,18 +106,22 @@ def init_data_collection(data_collection, file_dict):
 
 
 def remove_duplicate_objects_from_list(list_):
-    grouped_list = [list(g) for k, g in groupby(list_, key=lambda x: x.completed_sentence)]
-    for list1 in grouped_list:
-        list1.sort(key=lambda x: x.score)
-
+    list_.sort(key=lambda x: x.score, reverse=True)
     list2 = []
-    for list1 in grouped_list:
-        list2.append(list1[-1])
+    flag = True
+    for obj1 in list_:
+        for obj2 in list2:
+            if obj1.completed_sentence == obj2.completed_sentence and obj1.source_text == obj2.source_text:
+                flag = False
+                break
+        if flag:
+            list2.append(obj1)
     return list2
 
 
 def add_letter_to_match(data_collection, file_dict, prefix, i):
     SCORING = [5, 4, 3, 2, 1]
+
     tmp = get_best_k_completions(data_collection, file_dict, prefix)
     tmp = remove_duplicate_objects_from_list(tmp)
     for object_ in tmp:
@@ -128,6 +131,7 @@ def add_letter_to_match(data_collection, file_dict, prefix, i):
 
 def remove_letter_to_match(data_collection, file_dict, prefix, i):
     SCORING = [10, 8, 6, 4, 2]
+
     tmp = get_best_k_completions(data_collection, file_dict, prefix)
     tmp = remove_duplicate_objects_from_list(tmp)
     for object_ in tmp:
