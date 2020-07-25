@@ -220,7 +220,7 @@ def run():
     STOP_INPUT = '#'
     PRINT_GREEN = "\u001b[38;5;28m\x1B[3m"
     RESET_COLOR = "\033[0m"
-    PRINT_ITALIC = "\x1B[3m"
+    PRINT_ITALLIC = "\x1B[3m"
 
     while True:
         string_to_complete = read_input_from_user("The system is ready. Enter your text:\n")
@@ -237,7 +237,7 @@ def run():
 
                 # let user continue his search
                 string_to_complete += read_input_from_user(
-                    f"{PRINT_GREEN}{PRINT_ITALIC}{string_to_complete}{RESET_COLOR}")
+                    f"{PRINT_GREEN}{PRINT_ITALLIC}{string_to_complete}{RESET_COLOR}")
 
             else:
                 break
